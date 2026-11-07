@@ -1,28 +1,291 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ArcadeBoard — Support</title>
-<style>body{font:16px/1.6 "IBM Plex Mono",ui-monospace,Menlo,monospace;max-width:680px;margin:40px auto;padding:0 20px;background:#D5D6D1;color:#18191B}h1{font-size:26px;letter-spacing:.5px}h2{color:#B23A06;font-size:15px;letter-spacing:2px;text-transform:uppercase;margin-top:30px}em{color:#4E5049}strong{color:#18191B}a{color:#B23A06}ul{padding-left:20px}li{margin:6px 0}code{background:#C9CAC4;padding:1px 5px;border-radius:4px}</style></head><body>
-<h1>ArcadeBoard — Support</h1>
-<p>ArcadeBoard is a soundboard for voice notes: save the best bits from your group chat, trim and edit them, add effects, and send them back as voice notes.</p>
-<h2>Contact</h2>
-<p>Email <a href="mailto:natanaelsilva@gmail.com">natanaelsilva@gmail.com</a>. Please include your phone model and what you were doing.</p>
-<h2>Getting sounds in</h2>
-<ul>
-<li>In WhatsApp (or Files, Voice Memos, Telegram…): long-press a voice note → Share → <strong>ArcadeBoard Clip</strong>. The clipper opens; trim, edit, add effects and save.</li>
-<li>On a board: tap <strong>+</strong> → <strong>Audio from Files</strong>.</li>
-<li>A friend's board: open the <code>.arcadeboard</code> file they sent and import it.</li>
-</ul>
-<h2>Sending a sound back</h2>
-<p>Flip the switch on a board to <strong>Send</strong>, tap a pad and pick the chat. It arrives as a voice note.</p>
-<h2>ArcadeBoard Unlimited</h2>
-<ul>
-<li>The first 20 sounds you make are free. Boards friends share and the Starter Pack never count.</li>
-<li>Unlimited is a one-time purchase. On a new phone, open Settings → ArcadeBoard Unlimited → <strong>Restore purchase</strong> (same Apple ID / Google account).</li>
-<li>Refunds go through Apple (<a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>) or Google Play.</li>
-</ul>
-<h2>Backups</h2>
-<p>Settings → <strong>Back up everything</strong> makes one file with all your boards. Keep it in Files, iCloud Drive or Google Drive, and use <strong>Restore from a backup</strong> on a new phone.</p>
-<h2>Privacy</h2>
-<p>No accounts, no ads, no tracking. Everything stays on your phone. <a href="privacy-policy.html">Privacy policy</a>.</p>
-<h2>Open source licences</h2>
-<p>ArcadeBoard uses FFmpeg under the LGPL. To relink the app against a modified FFmpeg, you can get its object files free of charge by email (see Settings → Open source licenses in the app).</p>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ArcadeBoard — a pocket soundboard for voice notes</title>
+<meta name="description" content="Save the funniest voice notes from your group chat, trim them, add effects, and fire them back as voice notes from pads. No accounts, no ads, no tracking.">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<meta property="og:title" content="ArcadeBoard">
+<meta property="og:description" content="Your group chat's best bits, on pads.">
+<meta property="og:image" content="img/store-1-board.jpg">
+<style>
+@font-face{font-family:Doto;src:url(fonts/Doto_900Black.ttf) format("truetype");font-weight:900;font-display:swap}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexMono_500Medium.ttf) format("truetype");font-weight:500;font-display:swap}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexMono_600SemiBold.ttf) format("truetype");font-weight:600;font-display:swap}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexMono_700Bold.ttf) format("truetype");font-weight:700;font-display:swap}
+:root{
+  --chassis-a:#E0E1DC;--chassis-b:#D5D6D1;--deck:#C9CAC4;--deck-lo:#BEBFB9;--well-a:#B4B5AF;--well-b:#C6C7C1;
+  --face-hi:#FCFCF9;--face-top:#F8F8F4;--face-bot:#E7E7E2;--side:#ABACA6;--side-dk:#97988F;
+  --screen:#131416;--screen-hi:#26282C;--screen-ink:#EEEAE1;--screen-dim:#8A877F;
+  --ink:#18191B;--ink2:#4E5049;--ink3:#676962;
+  --accent:#FF5B14;--accent-ink:#B23A06;--accent-side:#C8430A;--accent-side-dk:#A93605;
+  --send:#22C55E;--send-ink:#11823A;
+}
+*{box-sizing:border-box}
+html{background:var(--chassis-b)}
+body{margin:0;font-family:Plex,ui-monospace,Menlo,monospace;color:var(--ink);background:linear-gradient(var(--chassis-a),var(--chassis-b) 900px);-webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.silk{font-weight:500;font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink2)}
+.silk b{font-weight:700;color:var(--ink)}
+.doto{font-family:Doto,Plex,monospace;font-weight:900;letter-spacing:1px}
+.doto .p{font-family:Plex;font-weight:700;font-size:.62em}
+
+/* nav */
+nav{display:flex;align-items:center;gap:14px;padding:18px 0}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(#FF7A3C,#F0500E);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 0 var(--accent-side-dk)}
+.logo i{width:11px;height:11px;border-radius:50%;background:#fff}
+nav .silk{flex:1}
+nav a.k{font-weight:600;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:9px 14px;border-radius:12px;background:linear-gradient(#FBFBF8,#E6E6E1);box-shadow:0 3px 0 var(--side),0 5px 8px rgba(0,0,0,.12),inset 0 1px 0 #fff}
+nav a.k:active{transform:translateY(2px);box-shadow:0 1px 0 var(--side),inset 0 1px 0 #fff}
+
+/* display */
+.bezel{border-radius:22px;padding:7px;background:linear-gradient(#BDBEB8,#E6E7E2);box-shadow:inset 0 2px 3px rgba(0,0,0,.22),inset 0 -1px 0 #fff}
+.scr{position:relative;overflow:hidden;border-radius:15px;padding:18px 20px;background:radial-gradient(120% 140% at 15% 0%,var(--screen-hi),var(--screen) 60%);box-shadow:inset 0 0 0 1px #000,inset 0 10px 20px rgba(0,0,0,.55);color:var(--screen-ink)}
+.scr:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.07),rgba(255,255,255,0) 45%);pointer-events:none}
+.meta{display:flex;justify-content:space-between;gap:10px;font-size:11px;font-weight:500;letter-spacing:1.4px;color:var(--screen-dim);text-transform:uppercase}
+.meta .on{color:var(--accent)}
+.np{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;min-height:20px}
+.np .dim{color:var(--screen-dim)}
+.np .hot{color:var(--accent)}
+.vu{flex:1;display:flex;gap:3px;height:11px;min-width:60px}
+.vu i{flex:1;border-radius:1px;background:#2C2E32}
+.vu i.l{background:var(--accent)}.vu i.y{background:#FFC400}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:28px 0 56px}
+.hero h1{margin:10px 0 12px;font-size:clamp(40px,6.4vw,74px);line-height:1.04}
+.lede{font-size:clamp(16px,1.6vw,19px);line-height:1.55;color:var(--ink2);margin:24px 2px 26px;max-width:540px}
+.stores{display:flex;gap:14px;flex-wrap:wrap}
+.store{position:relative;display:flex;align-items:center;gap:12px;min-width:220px;padding:12px 18px 14px;border-radius:16px;border:0;font:inherit;cursor:not-allowed;text-align:left;color:var(--ink);background:linear-gradient(#FBFBF8,#E6E6E1);box-shadow:0 5px 0 var(--side),0 8px 12px rgba(0,0,0,.16),inset 0 1px 0 #fff}
+.store svg{flex:none}
+.store small{display:block;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.store span{display:block;font-size:17px;font-weight:700;letter-spacing:.4px}
+.store em{position:absolute;top:-9px;right:12px;font-style:normal;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#fff;background:var(--accent);padding:3px 8px;border-radius:7px;box-shadow:0 2px 0 var(--accent-side-dk)}
+.fine{margin-top:16px;font-size:12px;color:var(--ink3);letter-spacing:.3px}
+
+/* phone */
+.phone{justify-self:center;width:min(340px,80vw);aspect-ratio:440/956;border-radius:52px;background:#111214;padding:11px;box-shadow:0 30px 60px rgba(0,0,0,.28),0 0 0 2px #3a3b3e;position:relative;transform:rotate(2deg)}
+.phone .s{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:linear-gradient(var(--chassis-a),var(--chassis-b))}
+.phone .sb{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px 32px;font:600 14px -apple-system,Helvetica,sans-serif;color:#111}
+.phone .isl{position:absolute;left:50%;top:10px;width:96px;height:28px;border-radius:14px;background:#000;transform:translateX(-50%)}
+.phone img{display:block;width:100%}
+
+/* sections */
+section{padding:56px 0}
+h2{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--accent-ink);font-weight:700;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2:before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+h3.big{font-size:clamp(26px,3.4vw,40px);line-height:1.15;margin:0 0 26px;font-weight:700;letter-spacing:-.5px}
+
+/* deck + pads */
+.deck{border-radius:30px;padding:16px;background:linear-gradient(var(--deck),var(--deck-lo));box-shadow:inset 0 2px 0 rgba(0,0,0,.08),inset 0 3px 8px rgba(0,0,0,.14),0 -1px 0 rgba(255,255,255,.8)}
+.try{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px;align-items:start}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.well{border-radius:20px;padding:4px;background:linear-gradient(var(--well-a),var(--well-b));box-shadow:inset 0 3px 4px rgba(0,0,0,.25),inset 0 -1px 0 rgba(255,255,255,.7)}
+.pad{position:relative;display:block;width:100%;aspect-ratio:1/1.04;border:0;padding:0;border-radius:16px;cursor:pointer;background:linear-gradient(var(--side),var(--side-dk));box-shadow:0 3px 5px rgba(0,0,0,.2);font:inherit;-webkit-tap-highlight-color:transparent}
+.pad .f{position:absolute;left:0;right:0;top:0;bottom:6px;border-radius:16px;padding:9px 10px;display:flex;flex-direction:column;text-align:left;background:radial-gradient(120% 90% at 50% 0%,var(--face-hi),var(--face-top) 40%,var(--face-bot));box-shadow:inset 0 1px 0 #fff;transition:top .05s,bottom .05s}
+.pad:active .f{top:5px;bottom:1px;background:linear-gradient(#DEDED8,#EAEAE5)}
+.pad .top{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:var(--ink3)}
+.sock{width:26px;height:10px;border-radius:5px;background:#2B2C2F;padding:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.8)}
+.sock i{display:block;height:100%;border-radius:3px}
+.pad .w{display:flex;gap:2px;align-items:center;height:16px;margin-top:8px}
+.pad .w b{width:2.2px;border-radius:1px;background:#9C9D97}
+.pad .lbl{margin-top:auto;font-size:clamp(10px,1.1vw,13px);line-height:1.15;font-weight:700;letter-spacing:.2px;text-transform:uppercase;color:var(--ink)}
+.pad.lit{background:linear-gradient(var(--accent-side),var(--accent-side-dk));box-shadow:0 0 22px 3px rgba(255,91,20,.5)}
+.pad.lit .f{top:4px;bottom:2px;background:radial-gradient(120% 90% at 50% 0%,#FFA673,#FF6420 45%,#F0500E)}
+.pad.lit .top,.pad.lit .lbl{color:#fff}
+.pad.lit .w b{background:#fff}
+.pad.lit .sock i{background:#fff!important;box-shadow:0 0 6px #fff!important}
+.hint{margin-top:12px;text-align:center}
+
+/* features */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{border-radius:18px;padding:18px 18px 20px;background:linear-gradient(#F7F7F3,#E5E5E0);box-shadow:0 5px 0 var(--side),0 8px 12px rgba(0,0,0,.12),inset 0 1px 0 #fff}
+.feat .n{font-size:26px;color:var(--accent)}
+.feat h4{margin:6px 0 6px;font-size:16px;letter-spacing:.3px}
+.feat p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+
+/* gallery */
+.gal{display:flex;gap:18px;overflow-x:auto;padding:6px 4px 22px;scroll-snap-type:x mandatory}
+.gal img{flex:none;width:240px;border-radius:22px;scroll-snap-align:start;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+/* price */
+.price{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.price .bezel .scr{padding:22px}
+.price .big{font-size:52px;line-height:1;margin:12px 0 6px}
+.price p{margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--screen-dim)}
+
+footer{padding:40px 0 60px;text-align:center}
+.grille{display:grid;grid-template-columns:repeat(17,1fr);gap:7px 0;width:250px;margin:0 auto 18px;justify-items:center}
+.grille i{width:7px;height:7px;border-radius:50%;background:#2a2b2e;box-shadow:inset 0 1.5px 1.5px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.75)}
+footer nav{justify-content:center;gap:10px;flex-wrap:wrap}
+footer p{font-size:12px;color:var(--ink3);margin:10px 0 0}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:36px;padding-top:10px}
+  .phone{transform:none}
+  .try{grid-template-columns:1fr}
+  .feats{grid-template-columns:1fr 1fr}
+  .price{grid-template-columns:1fr}
+}
+@media (max-width:540px){
+  .feats{grid-template-columns:1fr}
+  .pads{grid-template-columns:repeat(4,1fr);gap:6px}
+  .pad .w{display:none}
+  nav a.k.opt{display:none}
+  .store{min-width:0;flex:1;padding:12px 12px 14px;gap:10px}
+  .store span{font-size:15px;white-space:nowrap}
+}
+@media (prefers-reduced-motion:reduce){.phone{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><i></i></div>
+    <div class="silk"><b>ArcadeBoard</b></div>
+    <a class="k opt" href="#features">Features</a>
+    <a class="k" href="support.html">Support</a>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="bezel"><div class="scr">
+        <div class="meta"><span>AB-1 · Pocket soundboard</span><span>iOS · Android · <span class="on">● Soon</span></span></div>
+        <h1 class="doto">ARCADEBOARD</h1>
+        <div class="np"><span class="dim">▸</span><span>YOUR GROUP CHAT’S BEST BITS, ON PADS</span></div>
+      </div></div>
+      <p class="lede">Save the funniest voice notes from the group, trim them to the perfect bit, record over them, stack effects — and fire them back as voice notes with one tap.</p>
+      <div class="stores">
+        <button class="store" disabled aria-label="App Store, coming soon">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="#18191B"/><path d="M8 16.5l4-9 4 9M9.3 13.5h5.4" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><small>iPhone</small><span>App Store</span></div><em>Soon</em>
+        </button>
+        <button class="store" disabled aria-label="Google Play, coming soon">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="#18191B"/><path d="M9 7.5v9l7.5-4.5z" fill="#fff"/></svg>
+          <div><small>Android</small><span>Google Play</span></div><em>Soon</em>
+        </button>
+      </div>
+      <div class="fine">Free to start · no account · no ads · no tracking</div>
+    </div>
+    <div class="phone" aria-label="ArcadeBoard on an iPhone, playing a sound on The Lads board">
+      <div class="s"><div class="isl"></div><div class="sb"><span>9:41</span><span>●●●</span></div><img src="img/screen-1-board.jpg" alt="A board of sound pads, one lit orange while it plays"></div>
+    </div>
+  </header>
+
+  <section id="try">
+    <h2>Try the pads</h2>
+    <h3 class="big">Tap one. Tap it again to stop.</h3>
+    <div class="try">
+      <div class="bezel"><div class="scr">
+        <div class="meta"><span>Board 01</span><span>8 sounds · <span class="on">● Play</span></span></div>
+        <div class="doto" style="font-size:38px;margin:10px 0 12px">STARTER PACK</div>
+        <div class="np" id="np"><span class="dim">▸ TAP A PAD TO PLAY</span></div>
+      </div></div>
+      <div>
+        <div class="deck"><div class="pads" id="pads"></div></div>
+        <div class="silk hint">The Starter Pack comes with the app · sounds made for ArcadeBoard</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>What it does</h2>
+    <h3 class="big">A tiny sampler for the group chat.</h3>
+    <div class="feats">
+      <div class="feat"><div class="doto n">01</div><h4>Save the best bits</h4><p>Share any voice note into ArcadeBoard straight from your chat app. Zoom into the waveform and pull out the perfect three seconds.</p></div>
+      <div class="feat"><div class="doto n">02</div><h4>Edit like a pro</h4><p>Record your own voice over any part, insert a new bit, or cut a piece out of the middle. Everything is undoable.</p></div>
+      <div class="feat"><div class="doto n">03</div><h4>19 effects, stacked</h4><p>Echo, reverb, chipmunk, deep voice, slow-mo, robot, walkie-talkie, 8-bit, stutter… put them on any part and stack them.</p></div>
+      <div class="feat"><div class="doto n">04</div><h4>Pads that feel real</h4><p>Every sound gets a pad with its own LED and mini waveform. Add a friend’s photo, sort pads into folders, drag them around.</p></div>
+      <div class="feat"><div class="doto n">05</div><h4>Fire it back</h4><p>Flip to Send mode and one tap sends the clip into any chat — as a voice note.</p></div>
+      <div class="feat"><div class="doto n">06</div><h4>Share whole boards</h4><p>Export a board as one file and drop it in the group. Friends tap it to import; boards merge when someone adds sounds.</p></div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <h2>Screens</h2>
+    <h3 class="big">Light plastic. Dark display. Orange when it plays.</h3>
+    <div class="gal">
+      <img src="img/store-1-board.jpg" alt="Board with pads">
+      <img src="img/store-2-send.jpg" alt="Send mode">
+      <img src="img/store-3-clipper.jpg" alt="Clipper">
+      <img src="img/store-4-edit.jpg" alt="Record over a part">
+      <img src="img/store-5-fx.jpg" alt="Stacked effects">
+      <img src="img/store-6-home.jpg" alt="Boards">
+    </div>
+  </section>
+
+  <section id="price">
+    <h2>Price</h2>
+    <h3 class="big">Free to start. Pay once if you love it.</h3>
+    <div class="price">
+      <div class="bezel"><div class="scr"><div class="meta"><span>Free</span><span>Forever</span></div><div class="doto big">20</div><div style="font-weight:600">SOUNDS OF YOUR OWN</div><p>Every feature, every effect. Boards friends share and the Starter Pack don’t count.</p></div></div>
+      <div class="bezel"><div class="scr"><div class="meta"><span>Unlimited</span><span class="on">● One-time</span></div><div class="doto big">∞</div><div style="font-weight:600">NO LIMIT. NO SUBSCRIPTION.</div><p>A single in-app purchase. Restores on a new phone, Family Sharing friendly.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="grille" id="grille"></div>
+    <div class="silk">AB-1 · pocket soundboard</div>
+    <nav>
+      <a class="k" href="support.html">Support</a>
+      <a class="k" href="privacy-policy.html">Privacy</a>
+      <a class="k" href="mailto:natanaelsilva@gmail.com">Contact</a>
+    </nav>
+    <p>No accounts. No ads. No tracking — this site doesn’t use cookies or analytics either.<br>© 2026 Natanael Silva</p>
+  </footer>
+</div>
+
+<script>
+const SOUNDS = [
+  ['Punch', 'punch', '#FF3B30'], ['Kick', 'kick', '#FF8A00'], ['Special!', 'special', '#FFC400'], ['Zap', 'zap', '#20C6C0'],
+  ['Power up', 'power-up', '#2EC27E'], ['Coin', 'coin', '#FF4FA3'], ['Boom', 'boom', '#9B4DFF'], ['Block', 'block', '#2E6BFF'],
+];
+const pads = document.getElementById('pads');
+const np = document.getElementById('np');
+let current = null; // {audio, el, idx, name}
+let vuTimer = null;
+
+function bars(seed) {
+  let h = 0; for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return Array.from({ length: 10 }, (_, i) => { h = (h * 1103515245 + 12345 + i) >>> 0; return 4 + (h % 11); });
+}
+function stop() {
+  if (!current) return;
+  current.audio.pause(); current.audio.currentTime = 0; current.el.classList.remove('lit');
+  current = null; clearInterval(vuTimer);
+  np.innerHTML = '<span class="dim">▸ TAP A PAD TO PLAY</span>';
+}
+function showPlaying(idx, name) {
+  np.innerHTML = `<span class="hot">▶ ${String(idx).padStart(2, '0')} ${name.toUpperCase()}</span><span class="vu" id="vu">${'<i></i>'.repeat(20)}</span>`;
+  const segs = [...document.querySelectorAll('#vu i')];
+  let level = 12;
+  clearInterval(vuTimer);
+  vuTimer = setInterval(() => {
+    level = Math.max(5, Math.min(19, level + Math.round(Math.random() * 6 - 3)));
+    segs.forEach((s, i) => (s.className = i < level ? (i > 14 ? 'y' : 'l') : ''));
+  }, 90);
+}
+SOUNDS.forEach(([name, file, led], i) => {
+  const w = document.createElement('div'); w.className = 'well';
+  const b = document.createElement('button'); b.className = 'pad'; b.setAttribute('aria-label', `Play ${name}`);
+  b.innerHTML = `<span class="f"><span class="top"><span>${String(i + 1).padStart(2, '0')}</span><span class="sock"><i style="background:${led};box-shadow:0 0 6px ${led}"></i></span></span>` +
+    `<span class="w">${bars(name).map((h) => `<b style="height:${h}px"></b>`).join('')}</span><span class="lbl">${name}</span></span>`;
+  const audio = new Audio(`audio/${file}.mp3`); audio.preload = 'auto';
+  audio.addEventListener('ended', () => { if (current && current.audio === audio) stop(); });
+  b.addEventListener('click', () => {
+    if (current && current.audio === audio) return stop();
+    stop();
+    current = { audio, el: b };
+    b.classList.add('lit');
+    showPlaying(i + 1, name);
+    audio.play().catch(() => stop());
+  });
+  w.appendChild(b); pads.appendChild(w);
+});
+document.getElementById('grille').innerHTML = '<i></i>'.repeat(51);
+</script>
+</body>
+</html>
